@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密码修改器</title>
+</head>
+<body>
+    <h1>密码修改器</h1>
+    <input type="password" id="passwordInput1" placeholder="请输入密码"><br>
+    <input type="password" id="passwordInput2" placeholder="请再次输入密码"><br>
+    <button onclick="changePassword()">修改密码</button>
+    <script>
+        function changePassword() {
+            const password1 = document.getElementById('passwordInput1').value;
+            const password2 = document.getElementById('passwordInput2').value;
+
+            if (password1 === '' || password2 === '') {
+                alert('密码不能为空');
+                return;
+            }
+            if (password1=== '123456' || password1 === 'Admin123' || password1 === 'password' || password1 === 'admin' || password1 === 'qwerty' || password1 === '111111' || password1 === '123123' || password1 === 'abc123' || password1 === 'iloveyou' || password1 === '000000' || password1.length < 6) {
+                alert('别让人一猜就出来了，换一个密码吧！');
+                return;
+            }
+
+            if (password1 !== password2) {
+                alert('两次输入的密码不一致');
+                return;
+            } else {
+                const config = password1; // 使用正确的输入框 ID 获取值
+                alert('密码修改成功');
+                var blob = new Blob([config], { type: "text/plain;charset=utf-8" });
+                var link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = "XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=.pwyy";
+                document.body.appendChild(link);
+                link.click();
+                link.remove(); // 下载后移除链接元素
+            }
+
+            // 这里可以添加实际的密码修改逻辑，例如发送请求到服务器
+        }
+    </script>
+</body>
+</html>
