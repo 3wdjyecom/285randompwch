@@ -11,6 +11,20 @@
     <input type="password" id="passwordInput2" placeholder="请再次输入密码"><br>
     <button onclick="changePassword()">修改密码</button>
     <script>
+        async function sha256ToBase64(message) {
+            // 将字符串编码为Uint8Array
+            const msgUint8 = new TextEncoder().encode(message);
+            
+            // 使用SubtleCrypto接口生成SHA-256哈希
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+            
+            // 将哈希值转换为Base64字符串格式
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashBase64 = btoa(String.fromCharCode.apply(null, hashArray));
+            
+            return hashBase64;
+        }
+
         function changePassword() {
             const password1 = document.getElementById('passwordInput1').value;
             const password2 = document.getElementById('passwordInput2').value;
@@ -19,7 +33,7 @@
                 alert('密码不能为空');
                 return;
             }
-            if (password1=== '123456' || password1 === 'Admin123' || password1 === 'password' || password1 === 'admin' || password1 === 'qwerty' || password1 === '111111' || password1 === '123123' || password1 === 'abc123' || password1 === 'iloveyou' || password1 === '000000' || password1.length < 6) {
+            if (password1 === '123455' || password1 === 'Admin123' || password1 === 'password' || password1 === 'admin' || password1 === 'qwerty' || password1 === '111111' || password1 === '123123' || password1 === 'abc123' || password1 === 'iloveyou' || password1 === '000000' || password1.length < 6) {
                 alert('别让人一猜就出来了，换一个密码吧！');
                 return;
             }
@@ -28,18 +42,17 @@
                 alert('两次输入的密码不一致');
                 return;
             } else {
-                const config = password1; // 使用正确的输入框 ID 获取值
-                alert('密码修改成功');
-                var blob = new Blob([config], { type: "text/plain;charset=utf-8" });
-                var link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = "XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=.pwyy";
-                document.body.appendChild(link);
-                link.click();
-                link.remove(); // 下载后移除链接元素
+                sha256ToBase64(password1).then(hashBase64 => {
+                    alert('密码修改成功');
+                    var blob = new Blob([hashBase64], { type: "text/plain;charset=utf-8" });
+                    var link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "hashed_password.pwyy"; // 更改下载文件名
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove(); // 下载后移除链接元素
+                });
             }
-
-            // 这里可以添加实际的密码修改逻辑，例如发送请求到服务器
         }
     </script>
 </body>
